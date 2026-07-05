@@ -100,13 +100,9 @@ Building the v2.0.0-beta architecture and migrating from monolithic agent execut
   frequently skipped abstracts, metadata, or methodological tags.
   -  Best Practice: Systematically resolved by establishing strict Rigor Standards, Verification Pipelines, and Quality Gates in vault guidelines (GEMINI.md)
   
-      • The Rule: Notes must map to paper-template.md.
-      • Instruction: The mandatory top-level sections ( ## Research questions ,  ## Methodology ,  ## Findings ,  ## Synthesis ,  ##
-      Annotations ) must remain intact. Custom notes must be filed as H3 subheadings ( ### ) under the closest matching standard
-      header rather than introducing random top-level layouts.
-      • The Rule: The agent must cross-check any newly created note's YAML structure against the most recently validated compliant
-      file—specifically designated as YYYY_[note_title].md . If metadata fields such as `aliases` or `study_design` are
-      missing, the note is flagged as incomplete.
+      -  The Rule: Notes must map to paper-template.md.
+      -  Instruction: The mandatory top-level sections ( ## Research questions ,  ## Methodology ,  ## Findings ,  ## Synthesis ,  ## Annotations ) must remain intact. Custom notes must be filed as H3 subheadings ( ### ) under the closest matching standard header rather than introducing random top-level layouts.
+      - The Rule: The agent must cross-check any newly created note's YAML structure against the most recently validated compliant file—specifically designated as YYYY_[note_title].md . If metadata fields such as `aliases` or `study_design` are missing, the note is flagged as incomplete.
 
 ## Core Architecture: The 5-Layer Synthesis Loop
 
