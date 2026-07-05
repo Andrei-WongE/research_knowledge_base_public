@@ -38,7 +38,7 @@ This repository contains the configuration, hooks, and custom skills implementin
 
 ## 🛠️ Getting Started
 
-1. **Clone the repository** to your local machine.
+1. **Clone the repository** to your local machine in an Obsidian Vault.
 2. **Environment Configuration**:
    * Rename `.env.example` to `.env`.
    * Fill in your API keys (`GEMINI_API_KEY`, `GITHUB_TOKEN`, `OBSIDIAN_API_KEY`).
