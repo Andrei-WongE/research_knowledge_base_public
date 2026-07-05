@@ -57,47 +57,48 @@ Building the v2.0.0-beta architecture and migrating from monolithic agent execut
 
 1. Architectural Decisions & Why Monolithic Loops Fail
 
-    The Decision: Transitioned from an opaque, continuous prompt loop to an explicit 4-Phase State Machine (PLAN → ACT → OBSERVE → REVIEW).
-    The Lesson: When an LLM executes in a while-loop without explicit phase boundaries, failures during tool execution or synthesis cause the model to lose track of its trajectory. By enforcing discrete states and hard step budgets, every decision becomes inspectable, and runaway token consumption is eliminated.
+    - The Decision: Transitioned from an opaque, continuous prompt loop to an explicit 4-Phase State Machine (PLAN → ACT → OBSERVE → REVIEW).
+    - The Lesson: When an LLM executes in a while-loop without explicit phase boundaries, failures during tool execution or synthesis cause the model to lose track of its trajectory. By enforcing discrete states and hard step budgets, every decision becomes inspectable, and runaway token consumption is eliminated.
 
 2. Mistakes Made: Repetitive Action Loops & Token Waste
 
-    The Mistake: Early iterations of the active synthesis pipeline suffered from "looping behavior"—when a tool syntax error or missing parameter occurred, the model would repeatedly retry the exact same failing command, burning through API tokens and hitting context limits.
-    The Solution: I co-built an Action-Attempt Hash Register in Layer 2. By computing an MD5 hash of (toolName + JSON(args)), the system detects duplicate consecutive attempts and instantly short-circuits execution with a loop-breaker exception, forcing the agent to re-plan.
+    - The Mistake: Early iterations of the active synthesis pipeline suffered from "looping behavior"—when a tool syntax error or missing parameter occurred, the model would repeatedly retry the exact same failing command, burning through API tokens and hitting context limits.
+    - The Solution: I co-built an Action-Attempt Hash Register in Layer 2. By computing an MD5 hash of (toolName + JSON(args)), the system detects duplicate consecutive attempts and instantly short-circuits execution with a loop-breaker exception, forcing the agent to re-plan.
 
 3. Permission Tagging & Safety Rails
 
-    The Decision: Every tool in ToolRegistry is explicitly tagged as READ_ONLY, MUTATING, or DESTRUCTIVE.
-    The Lesson: A flat tool list treats querying an ontology the same as deleting a file. By tagging tools at the registry level, our Layer 1 control loop intercepts destructive actions and requires explicit human verification before execution, safeguarding immutable source files in 03_raw/.
+    - The Decision: Every tool in ToolRegistry is explicitly tagged as READ_ONLY, MUTATING, or DESTRUCTIVE.
+    - The Lesson: A flat tool list treats querying an ontology the same as deleting a file. By tagging tools at the registry level, our Layer 1 control loop intercepts destructive actions and requires explicit human verification before execution, safeguarding immutable source files in 03_raw/.
 
 4. Why LLMs Cannot Grade Their Own Homework
 
-    The Mistake: Relying on the same LLM actor to evaluate whether a synthesized literature note was complete led to sycophantic agreement—the model would declare flaId or structurally incomplete notes "passed" to satisfy the prompt.
-    The Solution: I separated the Actor from the Judge by creating an independent EvaluatorEngine (Layer 4). Furthermore, I implemented Hard Gates (running deterministic Python linter scripts and header checks at zero token cost) before ever invoking qualitative Soft Rubrics. If a note fails structural linting, it is rejected before spending a single token on LLM grading.
+    - The Mistake: Relying on the same LLM actor to evaluate whether a synthesized literature note was complete led to sycophantic agreement—the model would declare flaId or structurally incomplete notes "passed" to satisfy the prompt.
+    - The Solution: I separated the Actor from the Judge by creating an independent EvaluatorEngine (Layer 4). Furthermore, I implemented Hard Gates (running deterministic Python linter scripts and header checks at zero token cost) before ever invoking qualitative Soft Rubrics. If a note fails structural linting, it is rejected before spending a single token on LLM grading.
 
 5. Multi-Agent Squad Orchestration & Traceability
 
-    The Decision: Rather than passing 20 tools and massive instructions to a single generalist agent, I implemented a SquadOrchestrator (Layer 5) that dispatches specialized subagents (LiteratureSearcher, NoteCompiler, SynthesisAgent) with restricted tool authorization.
-    The Lesson: Tracing multi-agent execution requires hierarchical observability. I integrated an AuditLogger with trace-correlated IDs across all subagent invocations, making system debugging transparent and tractable. As tracked in wiki/log.md, this modular approach allowed us to perform batch remediations across 22 legacy notes with 100% precision while reducing total token consumption.
+    - The Decision: Rather than passing 20 tools and massive instructions to a single generalist agent, I implemented a SquadOrchestrator (Layer 5) that dispatches specialized subagents (LiteratureSearcher, NoteCompiler, SynthesisAgent) with restricted tool authorization.
+    - The Lesson: Tracing multi-agent execution requires hierarchical observability. I integrated an AuditLogger with trace-correlated IDs across all subagent invocations, making system debugging transparent and tractable. As tracked in wiki/log.md, this modular approach allowed us to perform batch remediations across 22 legacy notes with 100% precision while reducing total token consumption.
 
 6. Ohter learning opportunities
-  • Action: Standardized YAML frontmatter syntax to use block list formats (e.g.,  - tag ) instead of inline arrays ( [...] ).
-  • Best Practice: Never put raw wikilinks ( [[link]] ) inside YAML frontmatter fields as it corrupts Obsidian's properties parser.
+   
+  - Action: Standardized YAML frontmatter syntax to use block list formats (e.g.,  - tag ) instead of inline arrays ( [...] ).
+  -  Best Practice: Never put raw wikilinks ( [[link]] ) inside YAML frontmatter fields as it corrupts Obsidian's properties parser.
   Always quote citekeys and item keys to preserve formatting.
 
-  • Action: Created a  SquadOrchestrator  to split workloads into independent tasks and dispatch specialized, tool-restricted
+  - Action: Created a  SquadOrchestrator  to split workloads into independent tasks and dispatch specialized, tool-restricted
   subagents (`LiteratureSearcher`, `NoteCompiler`, `SynthesisAgent`).
-  • Best Practice: Isolating execution contexts prevents context contamination and token exhaustion, while trace-correlated
+  -  Best Practice: Isolating execution contexts prevents context contamination and token exhaustion, while trace-correlated
   logging makes debugging transparent.
 
-  • Action: I created an independent `EvaluatorEngine` to review the synthesized notes.
-  • Best Practice: Implement Hard Gates (zero-token structural checks, like Python regex linters) before qualitative soft rubrics.
+  -  Action: I created an independent `EvaluatorEngine` to review the synthesized notes.
+  - Best Practice: Implement Hard Gates (zero-token structural checks, like Python regex linters) before qualitative soft rubrics.
   If a note is missing a mandatory header or contains unquoted wikilinks in properties, it is rejected instantly without spending
   LLM tokens on evaluation.
 
-  • The Mistake: Early paper ingestions only imported a subset of Zotero annotations (often only 2-3 standard highlights) and
+  - The Mistake: Early paper ingestions only imported a subset of Zotero annotations (often only 2-3 standard highlights) and
   frequently skipped abstracts, metadata, or methodological tags.
-  • Best Practice: Systematically resolved by establishing strict Rigor Standards, Verification Pipelines, and Quality Gates in your vault guidelines (GEMINI.md)
+  -  Best Practice: Systematically resolved by establishing strict Rigor Standards, Verification Pipelines, and Quality Gates in vault guidelines (GEMINI.md)
   
       • The Rule: Notes must map to paper-template.md.
       • Instruction: The mandatory top-level sections ( ## Research questions ,  ## Methodology ,  ## Findings ,  ## Synthesis ,  ##
