@@ -1,0 +1,90 @@
+{
+  "wiki-context": {
+    "enabled": true,
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node wiki/system/hooks/session-start.js",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  },
+  "wiki-routing": {
+    "enabled": true,
+    "BeforeAgent": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node wiki/system/hooks/routing-hook.js",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  },
+  "wiki-guardrails": {
+    "enabled": true,
+    "PreToolUse": [
+      {
+        "matcher": "^(mcp_)?(obsidian_write_note|obsidian_create_note|obsidian_append_note|obsidian_update_note|obsidian_patch_note|write_file|replace)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node wiki/system/hooks/before-tool.js",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  },
+  "zotero-enrich": {
+    "enabled": true,
+    "PostToolUse": [
+      {
+        "matcher": "^(mcp_zotero_search|mcp_zotero_zotero_search_items|mcp_zotero_zotero_semantic_search|mcp_zotero_zotero_advanced_search)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node wiki/system/hooks/after-tool.js",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  },
+  "wiki-quality-gate": {
+    "enabled": true,
+    "PostToolUse": [
+      {
+        "matcher": "^(mcp_)?(obsidian_write_note|obsidian_create_note|obsidian_append_note|obsidian_update_note|obsidian_patch_note|write_file|replace)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node wiki/system/hooks/quality-gate.js",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  },
+  "wiki-linter-prompt": {
+    "enabled": true,
+    "PostInvocation": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node wiki/system/hooks/after-agent.js",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

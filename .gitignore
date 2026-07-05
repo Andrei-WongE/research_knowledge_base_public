@@ -1,0 +1,42 @@
+# Obsidian
+.obsidian/workspace
+.obsidian/workspace.json
+.obsidian/cache/
+.obsidian/backups/
+
+# Sensitive configuration files (containing API keys)
+.agents/mcp_config.json
+
+# Node modules and package logs
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# Temp files / scripts output
+stdout.txt
+stderr.txt
+strict_headers_report.txt
+*.log
+
+# Ignore all files in assets/ except the templates folder
+assets/*
+!assets/templates/
+
+# Ignore registry and system folders
+wiki/registry.json
+
+# Other
+.understand-anything/

@@ -1,0 +1,39 @@
+# .geminiignore for Research Knowledge Base
+
+# Ignore all hidden Obsidian and Git folders
+.obsidian/
+.git/
+
+# Other
+.understand-anything/
+
+# Ignore all non-text assets (images, PDFs, binaries)
+# This prevents processing 10,000+ files in assets/
+assets/images/
+assets/attachments/
+**/*.jpg
+**/*.jpeg
+**/*.png
+**/*.gif
+**/*.webp
+**/*.svg
+**/*.pdf
+**/*.bin
+**/*.zip
+**/*.tar.gz
+
+# Ignore system/temp files
+stdout.txt
+stderr.txt
+node_modules/
+dist/
+build/
+
+# Keep the pipeline folders searchable
+!01_papers/
+!02_topics/
+!03_raw/
+!04_synthesis/
+!05_outputs/
+!assets/templates/
+

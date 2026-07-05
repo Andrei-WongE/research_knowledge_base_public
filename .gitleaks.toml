@@ -1,0 +1,13 @@
+title = "Gitleaks custom config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Ignore Obsidian citekey frontmatter in paper notes"
+paths = [
+  '''^Obsidian vault/01_papers/.*\.md$'''
+]
+regexes = [
+  '''(?m)^\s*citekey\s*:\s*["']?[A-Za-z0-9._:-]+["']?\s*$'''
+]
