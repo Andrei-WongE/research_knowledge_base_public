@@ -98,6 +98,7 @@ Building the v2.0.0-beta architecture and migrating from monolithic agent execut
   • The Mistake: Early paper ingestions only imported a subset of Zotero annotations (often only 2-3 standard highlights) and
   frequently skipped abstracts, metadata, or methodological tags.
   • Best Practice: Systematically resolved by establishing strict Rigor Standards, Verification Pipelines, and Quality Gates in your vault guidelines (GEMINI.md)
+  
       • The Rule: Notes must map to paper-template.md.
       • Instruction: The mandatory top-level sections ( ## Research questions ,  ## Methodology ,  ## Findings ,  ## Synthesis ,  ##
       Annotations ) must remain intact. Custom notes must be filed as H3 subheadings ( ### ) under the closest matching standard
@@ -106,6 +107,52 @@ Building the v2.0.0-beta architecture and migrating from monolithic agent execut
       file—specifically designated as YYYY_[note_title].md . If metadata fields such as `aliases` or `study_design` are
       missing, the note is flagged as incomplete.
 
+## Core Architecture: The 5-Layer Synthesis Loop
+
+This version introduces a refined lifecycle powered by our **5-Layer Reference Agentic Architecture** (**Compile → Lint → Index → Synthesize**), ensuring that all research data transformations are deterministic, inspectable, and resilient against hallucination or token waste.
+
+```mermaid
+flowchart TD
+  %% Layer 1 & 5: Orchestration & State Machine
+  subgraph L5["Layer 5: Squad Orchestrator & Audit Logging"]
+    subgraph L1["Layer 1: 4-Phase State Machine (PLAN -> ACT -> OBSERVE -> REVIEW)"]
+      
+      %% Stage 1: Ingest (Parallel Subagents)
+      subgraph Ingest["1. Ingest (LiteratureSearcher / IngestAgent)"]
+        Z["Zotero MCP (Metadata/Cites)"] --> Cmp["wiki-compiler (v6.0)"]
+        SS["Semantic Scholar MCP"] --> Cmp
+        NLM["NotebookLM MCP"] --> Cmp
+      end
+
+      %% Stage 2: Audit & Hard Gates
+      subgraph Audit["2. Audit (EvaluatorEngine / Hard Gates - Layer 4)"]
+        Cmp --> Wiki["01_papers/"]
+        Wiki --> Gate["Layer 4 Hard Gate: check_headers.py / Linter"]
+        Gate --"Pass (Zero Cost)"--> Rubric["Qualitative Soft Rubric Scoring"]
+        Gate --"Fail (Short Circuit)"--> Fix["Re-plan / AttemptRecord Breaker (Layer 2)"]
+        Fix --> Cmp
+      end
+
+      %% Stage 3: Index
+      subgraph Index["3. Index (IndexAgent - Layer 3 Tagged Tools)"]
+        Rubric --> Topics["02_topics/"]
+        Topics --> Idx["wiki-indexer (v6.0)"]
+        Idx --> QColl["qmd embeddings / Hybrid Search"]
+      end
+
+      %% Stage 4: Synthesize
+      subgraph Synthesize["4. Synthesize (SynthesisAgent)"]
+        QColl --> Syn["wiki-synthesizer (v6.0)"]
+        Syn --> Out["04_synthesis/"]
+        Out --> Drafts["05_outputs / Bridge Reports"]
+      end
+
+    end
+  end
+
+  %% Feedback & Memory
+  Drafts -.->|"AtomicFileStorage Persistence (Layer 2)"| Ingest
+```
 
 
   
