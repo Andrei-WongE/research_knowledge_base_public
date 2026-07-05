@@ -80,7 +80,7 @@ Building the v2.0.0-beta architecture and migrating from monolithic agent execut
     - The Decision: Rather than passing 20 tools and massive instructions to a single generalist agent, I implemented a SquadOrchestrator (Layer 5) that dispatches specialized subagents (LiteratureSearcher, NoteCompiler, SynthesisAgent) with restricted tool authorization.
     - The Lesson: Tracing multi-agent execution requires hierarchical observability. I integrated an AuditLogger with trace-correlated IDs across all subagent invocations, making system debugging transparent and tractable. As tracked in wiki/log.md, this modular approach allowed us to perform batch remediations across 22 legacy notes with 100% precision while reducing total token consumption.
 
-6. Ohter learning opportunities
+6. Other Learning Opportunities
    
   - Action: Standardized YAML frontmatter syntax to use block list formats (e.g.,  - tag ) instead of inline arrays ( [...] ).
   -  Best Practice: Never put raw wikilinks ( [[link]] ) inside YAML frontmatter fields as it corrupts Obsidian's properties parser.
