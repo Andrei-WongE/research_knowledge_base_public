@@ -16,24 +16,26 @@ This repository contains the configuration, hooks, and custom skills implementin
 
 ## 📂 Vault Structure
 
+```text
+/vault
+├── .agents/        # Workspace configurations, hooks (v8.0), and skills (v6.0)
+│   ├── hooks.json  # Consolidated hooks configuration
+│   ├── mcp_config.json # Dedicated MCP server definitions
+│   └── skills/     # Specialized research agents (v6.0)
+├── 01_papers/      # Literature notes (citekey, zotero_item_key required)
+├── 02_topics/      # Conceptual and methodological notes
+├── 03_raw/         # Immutable source inbox (GEMINI.md protected)
+├── 04_synthesis/   # Cross-cutting summaries & Literature reviews
+├── 05_outputs/     # Manuscripts, reports, Bridge Reports, and Reference Agent
+│   └── reference_agent/ # 5-Layer Production-Grade Reference Architecture (v2.0.0-beta)
+├── wiki/           # System infrastructure
+│   ├── index.md    # Master vault index
+│   ├── log.md      # Append-only operation log (@log.md)
+│   └── system/     # System configurations and execution scripts
+│       ├── hooks/  # Active lifecycle hook scripts (v8.0)
+│       └── schemas/# Target folder validation schemas (v2.0)
+└── assets/         # Templates, images, and PDF artifacts
 ```
-├── .agents/                 # Agent configuration
-│   ├── hooks.json           # Event hooks for agent invocation
-│   ├── mcp_config.json      # Model Context Protocol servers
-│   └── skills/              # Custom agent skills (compiling, linting, memory)
-├── .github/
-│   └── workflows/           # CI pipelines (secret scanning, PR visual recaps)
-├── 01_papers/               # Standardized literature notes (YAML metadata + citations)
-├── 02_topics/               # Concept and methodological topic stubs
-├── 03_raw/                  # Inbox for unprocessed PDFs/documents
-├── 04_synthesis/            # Literature maps and cross-cutting reviews
-├── 05_outputs/              # Presentation slides, reports, and charts
-├── assets/
-│   └── templates/           # Markdown templates for papers, topics, and logs
-├── wiki/                    # System log, vault index, and hooks
-└── wiki_linter.py           # Custom Python script for structural link checking
-```
-
 ---
 
 ## 🛠️ Getting Started
