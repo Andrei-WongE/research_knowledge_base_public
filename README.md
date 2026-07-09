@@ -13,6 +13,17 @@ This repository contains the configuration, hooks, and custom skills implementin
 5. **Layer 5: Squad Orchestrator**: Dispatches specialized, instruction-restricted subagents for parallel execution of isolated subtasks.
 
 ---
+## Included Skills & Schemas
+
+| Skill / Schema         | Release | Description                                                                            |
+| ---------------------- | ------- | -------------------------------------------------------------------------------------- |
+| **wiki-compiler**      | v6.0    | Converts Zotero metadata + PDF artifacts into Literature Notes with persistence zones. |
+| **wiki-linter**        | v6.0    | Audits vault for structural integrity, header compliance, and metadata completeness.   |
+| **wiki-indexer**       | v6.0    | Syncs vault root collections with `qmd` embeddings for hybrid search.                  |
+| **wiki-synthesizer**   | v6.0    | Bridges indexing and manuscript drafting with semantic routing and contradiction audits.|
+| **Validation Schemas** | v2.0    | Upgraded JSON/YAML schemas in `wiki/system/schemas/` enforcing strict frontmatter.     |
+
+---
 
 ## 📂 Vault Structure
 
