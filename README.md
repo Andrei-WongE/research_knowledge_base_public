@@ -153,6 +153,22 @@ flowchart TD
   Drafts -.->|"AtomicFileStorage Persistence (Layer 2)"| Ingest
 ```
 
+## Potential Reseach Use
+* Research flow Alpha:
+    1. Read Zotero classified paper and use annotation tools.
+    2. Ingest paper using /wiki-compile skill.
+    3. Review note, modify and proceed to /wiki-ingest.
+    4. Do this for several papers, and the trigger /wiki-crystalize.
+    5. Use a graph based tools (for example InfraNodus) and find research gaps and potential research avenues.
+    6. Stir, think and repeat.
+        
+* Research flow Beta:
+    1. Use Google AI search to map main concepts in a literature area.
+    2. Continue the conversation, narrowing to your specific research interests.
+    3. Copy the URL of that conversation.
+    4. Paste it into your AI CLI inside your knowledge repository.
+    5. Query: "Compare the conceptual thread in [URL] with vault content. What are the contrasts and gaps?"
+    6. After step 5, push the gap list back into Google AI: "These are gaps relative to my research. Which are theoretically significant and which are peripheral?" Creating a loop.
 
   
 
