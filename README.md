@@ -1,6 +1,6 @@
 # Obsidian Agentic Research Vault Template
 
-A boilerplate structure and toolset for running a structured Obsidian vault optimized for academic literature research and automated systems workflows. This template showcases a hardened **5-Layer Reference Agentic Architecture** for co-programming with agentic AI models (e.g. Google Antigravity, Claude Code, Gemini CLI).
+A boilerplate structure and toolset for running a structured Obsidian vault optimized for academic literature research and automated systems workflows. This template showcases a hardened **5-Layer Reference Agentic Architecture** for co-programming with agentic AI models (e.g. Google Antigravity, Claude Code, Gemini CLI). What drives the implementation is: What must the model’s knowledge look like for step-by-step reasoning to be helpfull for PhD level research?
 
 ## 🚀 5-Layer Reference Architecture
 
